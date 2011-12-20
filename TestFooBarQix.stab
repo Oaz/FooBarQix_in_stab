@@ -1,0 +1,35 @@
+using java.lang;
+using junit.framework;
+ 
+public class TestFooBarQix : TestCase
+{ 
+  delegate void Action<T1,T2>(T1 t1, T2 t2);
+
+  public void testFBQ()
+	{
+		Action<Integer,String> check = (src,dst) => { assertEquals(src+" => "+dst, dst, FooBarQix.from(src)); };
+		check(1,"1");
+		check(2,"2");
+		check(3,"FooFoo");
+		check(4,"4");
+		check(5,"BarBar");
+		check(6,"Foo");
+		check(8,"8");
+		check(9,"Foo");
+		check(10,"Bar");
+		check(11,"11");
+		check(12,"Foo");
+		check(13,"Foo");
+		check(15,"FooBarBar");
+		check(7,"QixQix");
+		check(14,"Qix");
+		check(16,"16");
+		check(17,"Qix");
+		check(18,"Foo");
+		check(19,"19");
+		check(20,"Bar");
+		check(21,"FooQix");
+  }
+
+}
+

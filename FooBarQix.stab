@@ -1,0 +1,49 @@
+using java.lang;
+using stab.query;
+ 
+public static class FooBarQix
+{
+  public static String from(Integer numberToConvert)
+	{
+		var fbqDigits = sequence(
+			new { Value=3, Text="Foo" },
+			new { Value=5, Text="Bar" },
+			new { Value=7, Text="Qix" }
+		);
+
+		Predicate<Integer> isNumberToConvertDivisibleBy = n => (numberToConvert % n == 0);
+		var divisors = fbqDigits.where(x => isNumberToConvertDivisibleBy(x.Value));
+
+		var digitsReplacement = digitsLeftToRight(numberToConvert).selectMany(digit => fbqDigits.where(x => x.Value == digit));
+
+		var fbqConversions = divisors.concat(digitsReplacement);
+ 
+		if( fbqConversions.count() == 0 )
+    	return Integer.toString(numberToConvert);
+		else
+			return fbqConversions.select(s => s.Text).aggregate((a,b)=>a+b);
+  }
+
+  static Iterable<Integer> digitsLeftToRight(Integer number)
+	{
+		return digitsRightToLeft(number).reverse();
+  }
+
+  static Iterable<Integer> digitsRightToLeft(Integer number)
+	{
+		while(number != 0)
+		{
+			yield return number % 10;
+			number = number / 10;
+		}
+  }
+
+	delegate Boolean Predicate<T>(T t);
+
+	static Iterable<T> sequence<T>(params T[] items)
+	{
+		return Query.asIterable(items);
+	}
+
+}
+
